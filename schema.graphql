@@ -1,16 +1,41 @@
-type AdminChanged @entity(immutable: true) {
-  id: Bytes!
-  previousAdmin: Bytes! # address
-  newAdmin: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+type User @entity {
+  id: ID!
+  totalLocked: BigInt!
+  lockHistory: [LockEvent!]! @derivedFrom(field: "user")
+  unlockHistory: [UnlockEvent!]! @derivedFrom(field: "user")
+  bridgeHistory: [BridgeEvent!]! @derivedFrom(field: "user")
 }
 
-type Upgraded @entity(immutable: true) {
-  id: Bytes!
-  implementation: Bytes! # address
+type LockEvent @entity {
+  id: ID!
+  user: User!
+  amount: BigInt!
   blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+  timestamp: BigInt!
+  transactionHash: String!
+}
+
+type UnlockEvent @entity {
+  id: ID!
+  user: User!
+  amount: BigInt!
+  blockNumber: BigInt!
+  timestamp: BigInt!
+  transactionHash: String!
+}
+
+type BridgeEvent @entity {
+  id: ID!
+  user: User!
+  amount: BigInt!
+  dstChainId: BigInt!
+  blockNumber: BigInt!
+  timestamp: BigInt!
+  transactionHash: String!
+}
+
+type GlobalStat @entity {
+  id: ID!
+  totalLocked: BigInt!
+  userCount: BigInt!
 }
